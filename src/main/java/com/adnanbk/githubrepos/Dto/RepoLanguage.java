@@ -1,10 +1,12 @@
 package com.adnanbk.githubrepos.Dto;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@Data
 public class RepoLanguage {
 
 
@@ -20,5 +22,8 @@ public class RepoLanguage {
         this.name = name;
         this.listOfRepos = listOfRepos;
     }
+
+
+
 
 }
