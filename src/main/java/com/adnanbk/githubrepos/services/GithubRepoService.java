@@ -50,18 +50,12 @@ public class GithubRepoService {
                                      githubSearchRepoApi,localDate);
 
         var trendingRepos = getGithubRepos(url).getItems();
-        var languagesNames = trendingRepos.stream().
-                                           map(GithubRepo::getLanguage).distinct().
-                                           filter(Objects::nonNull);
 
         Set<RepoLanguage> repoLanguages =new HashSet<>();
-        languagesNames.forEach(lang->{
-
-           var languageRepos = trendingRepos.stream().filter(
-                   repo-> repo.getLanguage() !=null && repo.getLanguage().equals(lang)).collect(Collectors.toSet());
-            RepoLanguage repoLanguage =  new RepoLanguage(lang,languageRepos.size(),languageRepos);
-            repoLanguages.add(repoLanguage);
-        });
+        trendingRepos.stream().filter(repo -> Objects.nonNull(repo.getLanguage()))
+                .collect(Collectors.groupingBy(GithubRepo::getLanguage))
+                .forEach((language, githubRepos) ->
+                 repoLanguages.add(new RepoLanguage(language, githubRepos.size(), githubRepos)));
         return  CompletableFuture.completedFuture(repoLanguages);
 
     }
